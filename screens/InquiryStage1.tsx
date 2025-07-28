@@ -16,8 +16,8 @@ const identityOptions = [
 export default function InquiryStage1() {
   const [selected, setSelected] = useState<string | null>(null);
   const navigation = useNavigation();
-  const { theme } = useTheme();
-  const { colors, fontSizes } = useTheme();
+  // Destructure theme, colors, and fontSizes from a single call to useTheme()
+  const { theme, colors, fontSizes } = useTheme();
 
   const handleSelect = (option: string) => {
     setSelected(option);
@@ -25,8 +25,8 @@ export default function InquiryStage1() {
   };
 
   return (
-    <View style={[GlobalStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>  
-      <Text style={GlobalStyles.title}>Who Am I?</Text>
+    <View style={[GlobalStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <Text style={[GlobalStyles.title, { color: theme.colors.text, fontSize: fontSizes.xxl }]}>Who Am I?</Text> {/* Applied fontSizes here */}
       {identityOptions.map((option) => (
         <TouchableOpacity
           key={option}
@@ -45,14 +45,11 @@ export default function InquiryStage1() {
             },
           ]}
         >
-        <Text style={{ fontSize: fontSizes.md }}>
-        
-        </Text>
-
+          {/* Removed the empty Text component that was causing the error */}
           <Text
             style={{
               color: selected === option ? theme.colors.background : theme.colors.text,
-              fontSize: theme.fontSizes.md,
+              fontSize: fontSizes.md, // Correctly using fontSizes.md
               fontWeight: '600',
             }}
           >
