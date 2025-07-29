@@ -1,39 +1,50 @@
-// EmbodiedPracticeHome.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../theme/ThemeContext';
 import { GlobalStyles } from '../theme/GlobalStyles';
-
-const practices = [
-  { name: 'Still Sitting', route: 'StillSitting' },
-  { name: 'Heart Breathing', route: 'HeartBreathing' },
-];
+import { useTheme } from '../theme/ThemeContext';
 
 export default function EmbodiedPracticeHome() {
   const navigation = useNavigation();
-  const { theme, fontSizes } = useTheme();
+  const { theme } = useTheme();
+
+  const practices = [
+    { title: 'Still Sitting', desc: 'Breath + spine awareness', screen: 'Still Sitting' },
+    { title: 'Releasing Movement', desc: 'Shake & surrender (Osho-style)', screen: 'Releasing Movement' },
+    { title: 'Laying Down', desc: 'Full-body scan (Vipassana-inspired)', screen: 'Laying Down' },
+    { title: 'Heart Breathing', desc: 'Coherence + visual pulse', screen: 'Heart Breathing' },
+    { title: 'Walking Meditation', desc: 'Tap-sync to stay in the Now', screen: 'Walking Meditation' },
+  ];
 
   return (
-    <View style={[GlobalStyles.container, { alignItems: 'center', padding: 20 }]}>  
-      <Text style={[GlobalStyles.title, { color: theme.colors.gold }]}>Embodied Practices</Text>
-
-      {practices.map((item) => (
-        <TouchableOpacity
-          key={item.route}
-          onPress={() => navigation.navigate(item.route as never)}
-          style={[GlobalStyles.card, {
-            borderColor: theme.colors.gold,
-            borderWidth: 1,
-            marginTop: 16,
-            width: '100%',
-            alignItems: 'center',
-            paddingVertical: 14,
-          }]}
-        >
-          <Text style={{ color: theme.colors.text, fontSize: fontSizes.md }}>{item.name}</Text>
+    <View style={[GlobalStyles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[GlobalStyles.navBackButton, { backgroundColor: theme.colors.gold }]}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={[GlobalStyles.buttonText, { color: theme.colors.background }]}>← Back</Text>
         </TouchableOpacity>
-      ))}
+      </View>
+
+      <Text style={[GlobalStyles.title, { color: theme.colors.gold }]}>Embodied Practices</Text>
+      <Text style={[GlobalStyles.subtitle, { color: theme.colors.text, marginBottom: 20 }]}>
+        Tap any practice to begin your inner exploration
+      </Text>
+
+      <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+        {practices.map((practice, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[GlobalStyles.practiceCard, { borderColor: theme.colors.gold }]}
+            onPress={() => navigation.navigate(practice.screen as never)}
+          >
+            <Text style={[GlobalStyles.practiceTitle, { color: theme.colors.gold }]}>
+              {practice.title}
+            </Text>
+            <Text style={[GlobalStyles.text, { color: theme.colors.text, marginTop: 4 }]}>
+              {practice.desc}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 }

@@ -1,21 +1,33 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
 import { GlobalStyles } from '../theme/GlobalStyles';
 
 export default function HeartBreathing() {
-  const { colors } = useTheme(); // <--- CHANGE THIS LINE: Destructure 'colors' directly
+  const { theme } = useTheme();
+  const navigation = useNavigation();
 
   return (
-    <View style={[GlobalStyles.container, { padding: 20, backgroundColor:theme.colors.background }]}> {/* Added background color for theme compatibility */}
-      <Text style={[GlobalStyles.title, { color: colors.gold }]}>Heart Breathing</Text> {/* Added color for theme compatibility */}
-      <Text style={[GlobalStyles.text, { color: colors.text, marginTop: 20 }]}> {/* Fixed: Access colors.text directly */}
-        Bring attention to the center of your chest.
+    <View style={[GlobalStyles.container, { backgroundColor: theme.colors.background }]}>
+      <TouchableOpacity style={GlobalStyles.navBackButton} onPress={() => navigation.goBack()}>
+        <Text style={[GlobalStyles.buttonText, { color: theme.colors.gold }]}>← Back</Text>
+      </TouchableOpacity>
 
-        Breathe slowly — in and out — as if through your heart.
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+        <Text style={[GlobalStyles.title, { color: theme.colors.gold }]}>Heart Breathing</Text>
 
-        Let each breath fill you with warmth.
-      </Text>
+        <Text style={[GlobalStyles.text, { color: theme.colors.text, marginTop: 20 }]}>
+          Focus attention in the heart center. Inhale slowly, imagining the breath entering the heart.
+          Exhale gently, feeling warmth radiate from within.
+          {'\n\n'}
+          Synchronize with a soft internal pulse. Let your breath and heart cohere.
+        </Text>
+
+        <Text style={[GlobalStyles.text, { color: theme.colors.muted, marginTop: 20, fontStyle: 'italic' }]}>
+          Practice Duration: 3–10 min. Use soft focus, stay relaxed.
+        </Text>
+      </ScrollView>
     </View>
   );
 }
