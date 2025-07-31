@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 import { SaintsLibraryStyles } from '../theme/SaintsLibraryStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,6 +19,7 @@ export default function SaintsLibrary() {
   const [filter, setFilter] = useState('');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [tab, setTab] = useState<'all' | 'favorites'>('all');
+  const styles = createGlobalStyles(theme);
 
   useEffect(() => {
     loadFavorites();
@@ -58,7 +59,7 @@ export default function SaintsLibrary() {
       : quotes.filter(q => favorites.includes(q.text));
 
   return (
-    <View style={[GlobalStyles.container, SaintsLibraryStyles.container(theme.colors)]}>
+    <View style={[styles.container, SaintsLibraryStyles.container(theme.colors)]}>
       <Text style={SaintsLibraryStyles.title(theme.colors, fontSizes)}>
         Blessings of the Saints
       </Text>

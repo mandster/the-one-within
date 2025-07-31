@@ -30,6 +30,7 @@ export const JournalStyles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     alignItems: 'center',
+    color: red;
   },
   buttonText: {
     fontSize: 16,

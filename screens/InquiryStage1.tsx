@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 
 
 const identityOptions = [
@@ -18,6 +18,7 @@ export default function InquiryStage1() {
   const navigation = useNavigation();
   // Destructure theme, colors, and fontSizes from a single call to useTheme()
   const { theme, colors, fontSizes } = useTheme();
+  const styles = createGlobalStyles(theme);
 
   const handleSelect = (option: string) => {
     setSelected(option);
@@ -25,14 +26,14 @@ export default function InquiryStage1() {
   };
 
   return (
-    <View style={[GlobalStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={[GlobalStyles.title, { color: theme.colors.text, fontSize: fontSizes.xxl }]}>Who Am I?</Text> {/* Applied fontSizes here */}
+    <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <Text style={[styles.title, { color: theme.colors.text, fontSize: fontSizes.xxl }]}>Who Am I?</Text> {/* Applied fontSizes here */}
       {identityOptions.map((option) => (
         <TouchableOpacity
           key={option}
           onPress={() => handleSelect(option)}
           style={[
-            GlobalStyles.card,
+            styles.card,
             {
               backgroundColor:
                 selected === option ? theme.colors.gold : theme.colors.card,

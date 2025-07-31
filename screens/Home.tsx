@@ -1,15 +1,15 @@
-// screens/HomeScreen.tsx
-
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
 import { CardStyles } from '../theme/CardStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles'; // Import only the factory
+
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { theme, fontSizes } = useTheme();
+  const styles = createGlobalStyles(theme); // Call the function here
 
   const appSections = [
     {
@@ -52,10 +52,10 @@ export default function HomeScreen() {
   ];
 
   return (
-    <View style={[GlobalStyles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.welcomeContainer}>
-          <Text style={[GlobalStyles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>Welcome to the Inner Journey</Text>
+          <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>Welcome to the Inner Journey</Text>
           <Text style={[styles.subtitle, { color: theme.colors.text, fontSize: fontSizes.lg }]}>Your companion for spiritual growth and self-discovery.</Text>
         </View>
 
@@ -77,28 +77,3 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  scrollViewContent: {
-    flexGrow: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-    alignItems: 'center',
-  },
-  welcomeContainer: {
-    marginBottom: 30,
-    alignItems: 'center',
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginTop: 10,
-    lineHeight: 24,
-  },
-  cardsContainer: {
-    width: '100%',
-    gap: 15,
-  },
-  cardIcon: {
-    fontSize: 50,
-    marginBottom: 10,
-  },
-});

@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 
 const { width } = Dimensions.get('window');
 
@@ -14,7 +14,7 @@ export default function InquiryStage5() {
   const barrierOpacity = useSharedValue(1);
   const navigation = useNavigation();
   const { theme } = useTheme();
-
+  const styles = createGlobalStyles(theme);
   const playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
       require('../assets/wholeness.mp3')
@@ -42,11 +42,11 @@ export default function InquiryStage5() {
 
   return (
     <View
-      style={[GlobalStyles.container, { flexDirection: 'row', backgroundColor: theme.colors.background }]}
+      style={[styles.container, { flexDirection: 'row', backgroundColor: theme.colors.background }]}
       {...panResponder.panHandlers}
     >
-      <View style={[GlobalStyles.flexCenter, { width: '50%' }]}>
-        <Text style={[GlobalStyles.title, { color: theme.colors.text }]}>Me</Text>
+      <View style={[styles.flexCenter, { width: '50%' }]}>
+        <Text style={[styles.title, { color: theme.colors.text }]}>Me</Text>
       </View>
 
       <Animated.View
@@ -57,8 +57,8 @@ export default function InquiryStage5() {
         }, barrierStyle]}
       />
 
-      <View style={[GlobalStyles.flexCenter, { width: '50%' }]}>
-        <Text style={[GlobalStyles.title, { color: theme.colors.text }]}>World</Text>
+      <View style={[styles.flexCenter, { width: '50%' }]}>
+        <Text style={[styles.title, { color: theme.colors.text }]}>World</Text>
       </View>
 
       {unified && (
@@ -68,7 +68,7 @@ export default function InquiryStage5() {
           paddingHorizontal: 20,
           width: '100%',
         }}>
-          <Text style={[GlobalStyles.text, {
+          <Text style={[styles.text, {
             color: theme.colors.gold,
             fontStyle: 'italic',
             textAlign: 'center',
@@ -78,9 +78,9 @@ export default function InquiryStage5() {
           </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('Journal' as never)}
-            style={[GlobalStyles.button, { backgroundColor: theme.colors.gold }]}
+            style={[styles.button, { backgroundColor: theme.colors.gold }]}
           >
-            <Text style={[GlobalStyles.buttonText, { color: theme.colors.background }]}>
+            <Text style={[styles.buttonText, { color: theme.colors.background }]}>
               Go to Your Journal
             </Text>
           </TouchableOpacity>

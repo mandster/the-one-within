@@ -17,8 +17,8 @@ export default function PracticesMenu() {
   ];
 
   return (
-    <View style={[GlobalStyles.container, { backgroundColor: theme.colors.background }]}>
-      <Text style={[GlobalStyles.title, { color: theme.colors.gold, marginBottom: 20 }]}>Practice Menu</Text>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.title, { color: theme.colors.gold, marginBottom: 20 }]}>Practice Menu</Text>
       {practices.map(({ title, route }) => (
         <TouchableOpacity key={route} style={styles.button} onPress={() => navigation.navigate(route)}>
           <Text style={{ color: theme.colors.text }}>{title}</Text>

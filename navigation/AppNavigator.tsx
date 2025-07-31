@@ -5,14 +5,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, Platform } from 'react-native';
 
-// Screens
 import HomeScreen from '../screens/Home';
+import InquiryStagesMenu from '../screens/InquiryStagesMenu';
 import InquiryStage1 from '../screens/InquiryStage1';
 import InquiryStage2 from '../screens/InquiryStage2';
 import InquiryStage3 from '../screens/InquiryStage3';
 import InquiryStage4 from '../screens/InquiryStage4';
 import InquiryStage5 from '../screens/InquiryStage5';
-import InquiryStagesMenu from '../screens/InquiryStagesMenu';
 
 import Settings from '../screens/Settings';
 import Journal from '../screens/Journal';
@@ -26,80 +25,61 @@ import LayingDown from '../screens/LayingDown';
 import HeartBreathing from '../screens/HeartBreathing';
 import WalkingMeditation from '../screens/WalkingMeditation';
 
-// Theme
 import { useTheme, ThemeProvider } from '../theme/ThemeContext';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// --- Stack Navigators ---
+const HomeStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="InquiryStagesMenu" component={InquiryStagesMenu} />
+    <Stack.Screen name="InquiryStage1" component={InquiryStage1} />
+    <Stack.Screen name="InquiryStage2" component={InquiryStage2} />
+    <Stack.Screen name="InquiryStage3" component={InquiryStage3} />
+    <Stack.Screen name="InquiryStage4" component={InquiryStage4} />
+    <Stack.Screen name="InquiryStage5" component={InquiryStage5} />
+    <Stack.Screen name="SettingsTab" component={SettingsStack} />
+  </Stack.Navigator>
+);
 
-// --- Stacks ---
+const EmbodiedPracticesStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="EmbodiedHome" component={EmbodiedPracticeHome} />
+    <Stack.Screen name="Still Sitting" component={StillSitting} />
+    <Stack.Screen name="Releasing Movement" component={ReleasingMovement} />
+    <Stack.Screen name="Laying Down" component={LayingDown} />
+    <Stack.Screen name="Heart Breathing" component={HeartBreathing} />
+    <Stack.Screen name="Walking Meditation" component={WalkingMeditation} />
+  </Stack.Navigator>
+);
 
-const HomeStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="InquiryStagesMenu" component={InquiryStagesMenu} />
-      <Stack.Screen name="SettingsTab" component={SettingsStack} />
+const SettingsStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="SettingsHome" component={Settings} />
+  </Stack.Navigator>
+);
 
-      <Stack.Screen name="InquiryStage1" component={InquiryStage1} />
-      <Stack.Screen name="InquiryStage2" component={InquiryStage2} />
-      <Stack.Screen name="InquiryStage3" component={InquiryStage3} />
-      <Stack.Screen name="InquiryStage4" component={InquiryStage4} />
-      <Stack.Screen name="InquiryStage5" component={InquiryStage5} />
-    </Stack.Navigator>
-  );
-};
+const JournalStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="JournalHome" component={Journal} />
+  </Stack.Navigator>
+);
 
-const EmbodiedPracticesStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="EmbodiedHome" component={EmbodiedPracticeHome} />
-      <Stack.Screen name="Still Sitting" component={StillSitting} />
-      <Stack.Screen name="Releasing Movement" component={ReleasingMovement} />
-      <Stack.Screen name="Laying Down" component={LayingDown} />
-      <Stack.Screen name="Heart Breathing" component={HeartBreathing} />
-      <Stack.Screen name="Walking Meditation" component={WalkingMeditation} />
-      
-    </Stack.Navigator>
-  );
-};
+const SilenceTempleStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="SilenceTempleHome" component={SilenceTemple} />
+  </Stack.Navigator>
+);
 
-const SettingsStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="SettingsHome" component={Settings} />
-    </Stack.Navigator>
-  );
-};
+const SaintsLibraryStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="SaintsLibraryHome" component={SaintsLibrary} />
+  </Stack.Navigator>
+);
 
-const JournalStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="JournalHome" component={Journal} />
-    </Stack.Navigator>
-  );
-};
-
-const SilenceTempleStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="SilenceTempleHome" component={SilenceTemple} />
-    </Stack.Navigator>
-  );
-};
-
-const SaintsLibraryStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="SaintsLibraryHome" component={SaintsLibrary} />
-    </Stack.Navigator>
-  );
-};
-
-
-// --- Tabs ---
-
+// --- Tab Navigator ---
 const MainTabNavigator = () => {
   const { theme } = useTheme();
 
@@ -121,7 +101,7 @@ const MainTabNavigator = () => {
         tabBarActiveTintColor: theme.colors.gold,
         tabBarInactiveTintColor: theme.colors.muted,
         tabBarIcon: ({ focused, color, size }) => {
-          const icons: any = {
+          const icons: Record<string, string> = {
             HomeTab: focused ? '🏡' : '🏠',
             JournalTab: focused ? '📝' : '📄',
             EmbodiedTab: focused ? '🧘‍♀️' : '🧘',
@@ -141,9 +121,7 @@ const MainTabNavigator = () => {
   );
 };
 
-
-// --- Root App Navigator ---
-
+// --- Root Navigator ---
 export default function AppNavigator() {
   return (
     <ThemeProvider>

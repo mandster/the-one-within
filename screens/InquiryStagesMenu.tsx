@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 
 const stages = [
   { icon: '🌀', title: 'Who Am I?', screen: 'InquiryStage1' },
@@ -16,19 +16,20 @@ const stages = [
 export default function InquiryStagesMenu() {
   const navigation = useNavigation();
   const { theme } = useTheme();
+  const styles = createGlobalStyles(theme);
 
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: theme.colors.background }}
       contentContainerStyle={{ padding: 20 }}
     >
-      <Text style={[GlobalStyles.title, { color: theme.colors.text, marginBottom: 16 }]}>Inquiry Stages</Text>
+      <Text style={[styles.title, { color: theme.colors.text, marginBottom: 16 }]}>Inquiry Stages</Text>
 
       {stages.map((stage) => (
         <TouchableOpacity
           key={stage.screen}
           onPress={() => navigation.navigate(stage.screen as never)}
-          style={[GlobalStyles.card, {
+          style={[styles.card, {
             borderColor: theme.colors.gold,
             backgroundColor: theme.colors.card,
             padding: 16,

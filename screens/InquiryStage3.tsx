@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 
 export default function InquiryStage3() {
   const navigation = useNavigation();
   const { theme } = useTheme();
+  const styles = createGlobalStyles(theme);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,12 +19,12 @@ export default function InquiryStage3() {
   return (
     <View
       style={[
-        GlobalStyles.container,
+        styles.container,
         { justifyContent: 'center', alignItems: 'center' },
       ]}
     >
-      <Text style={[GlobalStyles.title, { textAlign: 'center' }]}>If This Ends, What Remains?</Text>
-      <Text style={[GlobalStyles.text, { marginTop: 20, textAlign: 'center' }]}>Life events fade away…</Text>
+      <Text style={[styles.title, { textAlign: 'center' }]}>If This Ends, What Remains?</Text>
+      <Text style={[styles.text, { marginTop: 20, textAlign: 'center' }]}>Life events fade away…</Text>
     </View>
   );
 }

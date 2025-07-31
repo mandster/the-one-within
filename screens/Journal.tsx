@@ -1,65 +1,167 @@
-// Journal.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+// screens/Journal.tsx
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+  Keyboard,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../theme/ThemeContext';
-import { JournalStyles } from '../theme/JournalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
+import uuid from 'react-native-uuid';
 
-// Define the type for a single journal entry
 interface JournalEntry {
-  content: string;
-  timestamp: string; // Or Date, depending on how you want to store/display it
+  id: string;
+  text: string;
+  date: string;
 }
 
-export default function Journal() {
-  const [text, setText] = useState('');
-  const [entries, setEntries] = useState<JournalEntry[]>([]);
-  const { theme, fontSizes } = useTheme(); // Destructure fontSizes here as well
+const STORAGE_KEY = '@journal_entries';
+const DRAFT_KEY = '@journal_draft';
 
-  console.log('Journal.tsx - theme:', theme); // Add this
-  console.log('Journal.tsx - fontSizes:', fontSizes); // Add this
+const Journal = () => {
+  const { theme } = useTheme();
+  const styles = createGlobalStyles(theme);
+
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [text, setText] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  // ✅ One-time cleaner (optional: uncomment for one run if needed)
+  // const cleanStorage = async () => {
+  //   const data = await AsyncStorage.getItem(STORAGE_KEY);
+  //   if (data) {
+  //     const parsed = JSON.parse(data);
+  //     const cleaned = parsed.filter((entry: any) => typeof entry?.text === 'string');
+  //     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+  //   }
+  // };
 
   useEffect(() => {
-    // ... (rest of your useEffect and loadEntries)
+    // cleanStorage(); // ← only once if needed
+    loadEntries();
+    loadDraft();
   }, []);
 
-  const saveEntry = async () => {
-    // ... (rest of your saveEntry)
+  useEffect(() => {
+    const saveDraft = async () => {
+      await AsyncStorage.setItem(DRAFT_KEY, text);
+    };
+    saveDraft();
+  }, [text]);
+
+  const loadEntries = async () => {
+    const data = await AsyncStorage.getItem(STORAGE_KEY);
+    if (data) setEntries(JSON.parse(data));
   };
 
+  const loadDraft = async () => {
+    const draft = await AsyncStorage.getItem(DRAFT_KEY);
+    if (draft) setText(draft);
+  };
+
+  const saveEntries = async (newEntries: JournalEntry[]) => {
+    setEntries(newEntries);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newEntries));
+  };
+
+  const handleSave = () => {
+    if (!text.trim()) return;
+    const now = new Date().toLocaleString();
+
+    const newEntry: JournalEntry = {
+      id: editingId ?? uuid.v4().toString(),
+      text,
+      date: now,
+    };
+
+    const updatedEntries = editingId
+      ? entries.map((e) => (e.id === editingId ? newEntry : e))
+      : [newEntry, ...entries];
+
+    saveEntries(updatedEntries);
+    setText('');
+    setEditingId(null);
+    AsyncStorage.removeItem(DRAFT_KEY);
+    Keyboard.dismiss();
+  };
+
+  const handleEdit = (entry: JournalEntry) => {
+    setEditingId(entry.id);
+    setText(entry.text);
+  };
+
+  const handleDelete = (id: string) => {
+    Alert.alert('Delete Entry', 'Are you sure?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          const updated = entries.filter((entry) => entry.id !== id);
+          await saveEntries(updated);
+          if (editingId === id) {
+            setEditingId(null);
+            setText('');
+          }
+        },
+      },
+    ]);
+  };
+
+  // ✅ Safer filtering
+  const filteredEntries = (entries || []).filter((entry) => {
+    const entryText = typeof entry?.text === 'string' ? entry.text : '';
+    return entryText.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
-    <View style={[JournalStyles.container, { backgroundColor: theme.colors.background }]}>
-      <Text style={[JournalStyles.title, { color: theme.colors.text }]}>Your Realizations</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Journal</Text>
 
       <TextInput
-        style={[JournalStyles.input, { borderColor: theme.colors.gold, color: theme.colors.text }]}
-        multiline
-        placeholder="Write what you realized..."
-        placeholderTextColor={theme.colors.muted}
-        value={text}
-        onChangeText={setText}
+        placeholder="Search your thoughts..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        style={[styles.subHeading, { marginBottom: 12 }]}
+        placeholderTextColor={theme.colors.textMuted}
       />
 
-      <TouchableOpacity style={[JournalStyles.button, { backgroundColor: theme.colors.gold }]} onPress={saveEntry}>
-        <Text style={[JournalStyles.buttonText, { color: theme.colors.background }]}>Save</Text>
+      <TextInput
+        placeholder="Write what's on your mind..."
+        value={text}
+        onChangeText={setText}
+        style={[styles.textInput, { height: 120 }]}
+        multiline
+        placeholderTextColor={theme.colors.textMuted}
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>{editingId ? 'Update' : 'Save'}</Text>
       </TouchableOpacity>
 
-      {entries.length === 0 ? (
-        <View style={JournalStyles.emptyState}>
-          <Text style={{ color: theme.colors.muted, fontSize: fontSizes.md }}>No entries yet. Start writing your insights.</Text> {/* Use fontSizes here */}
-        </View>
-      ) : (
-        <ScrollView style={{ marginTop: 20 }}>
-          {entries.map((entry, idx) => (
-            <View key={idx} style={[JournalStyles.card, { backgroundColor: theme.colors.card }]}>
-              <Text style={{ color: theme.colors.text, fontSize: fontSizes.md }}>{entry.content}</Text>
-              <Text style={{ color: theme.colors.muted, fontSize: fontSizes.sm, marginTop: 5 }}>
-                {entry.timestamp}
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
-      )}
+      <FlatList
+        data={filteredEntries}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 120 }}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => handleEdit(item)}
+            onLongPress={() => handleDelete(item.id)}
+            style={styles.card}
+          >
+            <Text style={styles.practiceTitle}>{item.date}</Text>
+            <Text style={styles.practiceSubtitle}>{item.text}</Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
-}
+};
+
+export default Journal;

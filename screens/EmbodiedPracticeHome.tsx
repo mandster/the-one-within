@@ -1,46 +1,77 @@
+// screens/EmbodiedPracticeHome.tsx
+
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GlobalStyles } from '../theme/GlobalStyles';
 import { useTheme } from '../theme/ThemeContext';
+import { styles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
+
+const practices = [
+  {
+    title: '🧘 Still Sitting',
+    description: 'Breath + spine awareness',
+    route: 'Still Sitting',
+  },
+  {
+    title: '💃 Releasing Movement',
+    description: 'Shake & surrender (Osho-style)',
+    route: 'Releasing Movement',
+  },
+  {
+    title: '🛌 Laying Down',
+    description: 'Full-body scan (Vipassana-inspired)',
+    route: 'Laying Down',
+  },
+  {
+    title: '💓 Heart Breathing',
+    description: 'Coherence meditation with visual pulse',
+    route: 'Heart Breathing',
+  },
+  {
+    title: '🚶 Walking Meditation',
+    description: 'Tap-sync guidance to stay in the Now',
+    route: 'Walking Meditation',
+  },
+];
 
 export default function EmbodiedPracticeHome() {
+  const { theme, fontSizes } = useTheme();
   const navigation = useNavigation();
-  const { theme } = useTheme();
-
-  const practices = [
-    { title: 'Still Sitting', desc: 'Breath + spine awareness', screen: 'Still Sitting' },
-    { title: 'Releasing Movement', desc: 'Shake & surrender (Osho-style)', screen: 'Releasing Movement' },
-    { title: 'Laying Down', desc: 'Full-body scan (Vipassana-inspired)', screen: 'Laying Down' },
-    { title: 'Heart Breathing', desc: 'Coherence + visual pulse', screen: 'Heart Breathing' },
-    { title: 'Walking Meditation', desc: 'Tap-sync to stay in the Now', screen: 'Walking Meditation' },
-  ];
-
+  const styles = createGlobalStyles(theme);
+  
   return (
-    <View style={[GlobalStyles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[GlobalStyles.navBackButton, { backgroundColor: theme.colors.gold }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={[GlobalStyles.buttonText, { color: theme.colors.background }]}>← Back</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={[GlobalStyles.title, { color: theme.colors.gold }]}>Embodied Practices</Text>
-      <Text style={[GlobalStyles.subtitle, { color: theme.colors.text, marginBottom: 20 }]}>
-        Tap any practice to begin your inner exploration
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
+        Embodied Practices
+      </Text>
+      <Text style={[styles.text, { color: theme.colors.text, marginBottom: 24 }]}>
+        Choose a practice to enter presence through your body:
       </Text>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
+      >
         {practices.map((practice, index) => (
           <TouchableOpacity
             key={index}
-            style={[GlobalStyles.practiceCard, { borderColor: theme.colors.gold }]}
-            onPress={() => navigation.navigate(practice.screen as never)}
+            onPress={() => navigation.navigate(practice.route as never)}
+            activeOpacity={0.9}
+            style={[
+              styles.card,
+              {
+                backgroundColor: theme.colors.cardBackground,
+                borderColor: theme.colors.gold,
+                marginBottom: 16,
+              },
+            ]}
           >
-            <Text style={[GlobalStyles.practiceTitle, { color: theme.colors.gold }]}>
+            <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
               {practice.title}
             </Text>
-            <Text style={[GlobalStyles.text, { color: theme.colors.text, marginTop: 4 }]}>
-              {practice.desc}
+            <Text style={[styles.cardSubtitle, { color: theme.colors.muted }]}>
+              {practice.description}
             </Text>
           </TouchableOpacity>
         ))}

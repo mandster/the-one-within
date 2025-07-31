@@ -4,23 +4,26 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
-  Switch,
   TouchableOpacity,
   Animated,
   Easing,
+  Switch,
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import styles from '../theme/SilenceTempleStyles';
-import ProgressRing from '../components/ProgressRing';
+import ProgressRing from '../components/ProgressRing'; // ✅ Ensure this is a default export
+
+const CIRCLE_LENGTH = 2 * Math.PI * 100;
 
 export default function SilenceTemple() {
   const { theme, darkMode, toggleDarkMode, fontSizes } = useTheme();
+
+  const styles = createGlobalStyles(theme);
 
   const [isSitting, setIsSitting] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -29,7 +32,6 @@ export default function SilenceTemple() {
   const intervalRef = useRef<NodeJS.Timer | null>(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
-  // Load total silence time
   useEffect(() => {
     (async () => {
       const stored = await AsyncStorage.getItem('totalSilenceTime');
@@ -37,12 +39,10 @@ export default function SilenceTemple() {
     })();
   }, []);
 
-  // Save total silence time on update
   useEffect(() => {
     AsyncStorage.setItem('totalSilenceTime', totalSeconds.toString());
   }, [totalSeconds]);
 
-  // Handle pulse and timing
   useEffect(() => {
     if (isSitting) {
       intervalRef.current = setInterval(() => {
@@ -98,17 +98,27 @@ export default function SilenceTemple() {
   };
 
   return (
-    <View style={[GlobalStyles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.centeredContent}>
-        <Text style={[GlobalStyles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
+        <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
           Silence Temple
         </Text>
-        <Text style={[styles.subtitle, { color: theme.colors.text }]}>Enter the Presence</Text>
+        <Text style={[styles.subtitle, { color: theme.colors.text }]}>
+          Enter the Presence
+        </Text>
 
         <View style={styles.circleContainer}>
-          <Animated.View style={[styles.outerGlow, { transform: [{ scale: pulseAnim }] }]} />
-
-          <TouchableOpacity onPress={toggleSilence} activeOpacity={0.8} style={styles.silenceCard}>
+          <Animated.View
+            style={[
+              styles.outerGlow,
+              { transform: [{ scale: pulseAnim }] },
+            ]}
+          />
+          <TouchableOpacity
+            onPress={toggleSilence}
+            activeOpacity={0.8}
+            style={styles.silenceCard}
+          >
             <LinearGradient
               colors={['#f3e7e9', '#e3eeff']}
               start={{ x: 0.1, y: 0 }}
@@ -122,13 +132,17 @@ export default function SilenceTemple() {
                 color={theme.colors.gold}
               />
               <View style={styles.innerCircle}>
-                <Text style={styles.buttonText}>{isSitting ? 'Pause' : 'Start'}</Text>
+                <Text style={styles.buttonText}>
+                  {isSitting ? 'Pause' : 'Start'}
+                </Text>
               </View>
             </LinearGradient>
           </TouchableOpacity>
 
           {!isSitting && (
-            <Text style={styles.guidingText}>Tap the circle to begin your silence</Text>
+            <Text style={styles.guidingText}>
+              Tap the circle to begin your silence
+            </Text>
           )}
         </View>
 

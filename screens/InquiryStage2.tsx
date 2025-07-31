@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
-import { GlobalStyles } from '../theme/GlobalStyles';
+import { createGlobalStyles } from '../theme/GlobalStyles';
 
 const identities = ['Name', 'Past', 'Gender', 'Job', 'History', 'Personality'];
 const { width } = Dimensions.get('window');
@@ -11,6 +11,7 @@ export default function InquiryStage2() {
   const [dissolved, setDissolved] = useState<string[]>([]);
   const navigation = useNavigation();
   const { theme } = useTheme();
+  const styles = createGlobalStyles(theme);
 
   const handleDissolve = (item: string) => {
     setDissolved((prev) => [...prev, item]);
@@ -20,8 +21,8 @@ export default function InquiryStage2() {
   };
 
   return (
-    <View style={[GlobalStyles.container, { alignItems: 'center' }]}>  
-      <Text style={GlobalStyles.title}>What Am I Not?</Text>
+    <View style={[styles.container, { alignItems: 'center' }]}>  
+      <Text style={styles.title}>What Am I Not?</Text>
       <View
         style={{
           flexDirection: 'row',
