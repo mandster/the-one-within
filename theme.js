@@ -69,7 +69,7 @@ export const theme = {
     );
   };
   
-  // styles.ts
+  // GlobalStyles.ts
   import { StyleSheet } from 'react-native';
   import { theme } from './theme';
   
