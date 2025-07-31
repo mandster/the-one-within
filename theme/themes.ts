@@ -23,7 +23,7 @@ export const lightTheme = {
   export const darkTheme = {
     colors: {
       background: '#004040',
-      surface: '#1E1E1E',
+      surface: '#ffffff',
       text: '#ffffff',
       muted: '#999999',
       gold: '#ffb347',
