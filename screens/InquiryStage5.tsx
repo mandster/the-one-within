@@ -1,91 +1,124 @@
-import React, { useState } from 'react';
-import { View, Text, Dimensions, PanResponder, TouchableOpacity } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { Audio } from 'expo-av';
-import * as Haptics from 'expo-haptics';
+// screens/InquiryStage5.tsx
+import React, { useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  PanResponder,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Vibration,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
 import { createGlobalStyles } from '../theme/GlobalStyles';
+import { Audio } from 'expo-av';
+import { Asset } from 'expo-asset';
 
 const { width } = Dimensions.get('window');
+const dropX = width / 2;
+
+const draggableWords = ['Name', 'Career', 'Thoughts', 'Beliefs', 'Body', 'Mind'];
 
 export default function InquiryStage5() {
-  const [unified, setUnified] = useState(false);
-  const barrierOpacity = useSharedValue(1);
   const navigation = useNavigation();
   const { theme } = useTheme();
   const styles = createGlobalStyles(theme);
-  const playSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require('../assets/wholeness.mp3')
-    );
-    await sound.playAsync();
+
+  const [droppedItems, setDroppedItems] = useState<Record<string, 'Me' | 'World'>>({});
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+  const playPopSound = async () => {
+    try {
+      const asset = Asset.fromModule(require('../assets/pop.mp3'));
+      await asset.downloadAsync();
+  
+      const { sound } = await Audio.Sound.createAsync({ uri: asset.localUri });
+      await sound.playAsync();
+    } catch (error) {
+      console.warn('Sound playback failed:', error);
+    }
+  };
+  const handleDrop = async (word: string, gestureX: number) => {
+    const isRight = gestureX > dropX;
+    if (Platform.OS !== 'web') Vibration.vibrate(30);
+    await playPopSound();
+
+    setDroppedItems((prev) => ({ ...prev, [word]: isRight ? 'World' : 'Me' }));
   };
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gestureState) => {
-      const midX = width / 2;
-      const crossThreshold = Math.abs(gestureState.moveX - midX);
-      if (crossThreshold < 50 && !unified) {
-        barrierOpacity.value = withTiming(0, { duration: 1000 });
-        setUnified(true);
-        playSound();
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      }
-    },
-  });
+  const renderBubbles = () =>
+    draggableWords.map((word, index) => {
+      const pan = useRef(new Animated.ValueXY()).current;
 
-  const barrierStyle = useAnimatedStyle(() => ({
-    opacity: barrierOpacity.value,
-  }));
+      const panResponder = useRef(
+        PanResponder.create({
+          onStartShouldSetPanResponder: () => true,
+          onPanResponderMove: Animated.event(
+            [null, { dx: pan.x, dy: pan.y }],
+            { useNativeDriver: false }
+          ),
+          onPanResponderRelease: (_, gestureState) => {
+            handleDrop(word, gestureState.moveX);
+            Animated.spring(pan, {
+              toValue: { x: 0, y: 0 },
+              useNativeDriver: false,
+            }).start();
+          },
+        })
+      ).current;
+
+      const isDropped = droppedItems[word];
+
+      return (
+        <Animated.View
+          key={index}
+          {...panResponder.panHandlers}
+          style={[
+            styles.bubble,
+            {
+              transform: pan.getTranslateTransform(),
+              backgroundColor: isDropped
+                ? isDropped === 'Me'
+                  ? '#AEDFF7'
+                  : '#C2F9B5'
+                : '#fff',
+              opacity: isDropped ? 0.5 : 1,
+            },
+            styles.shadow,
+          ]}
+        >
+          <Text style={[styles.practiceTitle, { color: '#333' }]}>{word}</Text>
+        </Animated.View>
+      );
+    });
 
   return (
-    <View
-      style={[styles.container, { flexDirection: 'row', backgroundColor: theme.colors.background }]}
-      {...panResponder.panHandlers}
-    >
-      <View style={[styles.flexCenter, { width: '50%' }]}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>Me</Text>
+    <View style={[styles.container, { paddingTop: 60 }]}>
+      <View style={styles.topTextContainer}>
+        <Text style={[styles.title, { flex: 1, textAlign: 'center' }]}>Me</Text>
+        <Text style={[styles.title, { flex: 1, textAlign: 'center' }]}>World</Text>
       </View>
 
-      <Animated.View
-        style={[{
-          width: 1,
-          backgroundColor: theme.colors.gold,
-          height: '100%',
-        }, barrierStyle]}
-      />
-
-      <View style={[styles.flexCenter, { width: '50%' }]}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>World</Text>
+      <View style={styles.splitContainer}>
+        <View style={styles.leftHalf} />
+        <View style={styles.divider} />
+        <View style={styles.rightHalf} />
       </View>
 
-      {unified && (
-        <View style={{
-          position: 'absolute',
-          bottom: 32,
-          paddingHorizontal: 20,
-          width: '100%',
-        }}>
-          <Text style={[styles.text, {
-            color: theme.colors.gold,
-            fontStyle: 'italic',
-            textAlign: 'center',
-            marginBottom: 16,
-          }]}>
-            “You are not in the world. The world is in you.”
-          </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Journal' as never)}
-            style={[styles.button, { backgroundColor: theme.colors.gold }]}
-          >
-            <Text style={[styles.buttonText, { color: theme.colors.background }]}>
-              Go to Your Journal
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.bubbleWrap}>{renderBubbles()}</View>
+
+      {Object.keys(droppedItems).length === draggableWords.length && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('InquiryStage6' as never)}
+          style={[styles.button, { marginTop: 40 }]}
+        >
+          <Text style={styles.buttonText}>Continue →</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
 }
+
