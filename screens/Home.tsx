@@ -3,18 +3,18 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
 import { CardStyles } from '../theme/CardStyles';
-import { createGlobalStyles } from '../theme/GlobalStyles'; // Import only the factory
-
+import { createGlobalStyles } from '../theme/GlobalStyles';
+import { GlassCard } from '../components/GlassCard';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { theme, fontSizes } = useTheme();
-  const styles = createGlobalStyles(theme); // Call the function here
+  const styles = createGlobalStyles(theme);
 
   const appSections = [
     {
       name: 'Inquiry',
-      description: 'Who is the One Within?.',
+      description: 'Who is the One Within?',
       route: 'InquiryStagesMenu',
       icon: '🔍',
     },
@@ -48,32 +48,45 @@ export default function HomeScreen() {
       route: 'SettingsTab',
       icon: '⚙️',
     },
-    
   ];
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {/* Welcome Message */}
         <View style={styles.welcomeContainer}>
-          <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>Welcome to the Inner Journey</Text>
-          <Text style={[styles.subtitle, { color: theme.colors.text, fontSize: fontSizes.lg }]}>Your companion for spiritual growth and self-discovery.</Text>
+          <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
+            Welcome to the Inner Journey
+          </Text>
+          <Text style={[styles.subtitle, { color: theme.colors.text, fontSize: fontSizes.lg }]}>
+            Your companion for spiritual growth and self-discovery.
+          </Text>
         </View>
 
+        {/* App Sections */}
+
+        
         <View style={styles.cardsContainer}>
           {appSections.map((section, index) => (
-            <TouchableOpacity
+            <GlassCard
               key={index}
-              style={[CardStyles.card, { backgroundColor: 'rgba(255,255,255,0.6)', borderColor: theme.colors.gold, shadowColor: theme.colors.text }]}
+              icon={section.icon}
+              title={section.name}
+              subtitle={section.description}
               onPress={() => navigation.navigate(section.route as never)}
-            >
-              <Text style={styles.cardIcon}>{section.icon}</Text>
-              <Text style={[CardStyles.cardTitle, { color: theme.colors.text, fontSize: fontSizes.xl }]}>{section.name}</Text>
-              <Text style={[CardStyles.cardDescription, { color: theme.colors.muted, fontSize: fontSizes.md }]}>{section.description}</Text>
-            </TouchableOpacity>
+            />
           ))}
+        
+          <TouchableOpacity
+            style={[styles.button, { marginTop: 20 }]}
+            onPress={() => navigation.navigate('ProgressOverview' as never)}
+          >
+            <Text style={styles.buttonText}>📈 View Your Progress</Text>
+          </TouchableOpacity>
         </View>
+        
+
       </ScrollView>
     </View>
   );
 }
-

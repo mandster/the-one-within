@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const quotes = [
   { author: 'Rumi', text: 'What you seek is seeking you.' },
   { author: 'Kabir', text: 'I laugh when I hear that the fish in the water is thirsty.' },
+  { author: 'Guru Nanak', text: 'Truth is the highest virtue, but higher still is truthful living.' },
   { author: 'Lao Tzu', text: 'To the mind that is still, the whole universe surrenders.' },
   { author: 'Ramana Maharshi', text: 'The question ‘Who am I?’ will destroy all other questions.' },
   { author: 'Mira Bai', text: 'I have found the One my heart loves. I will not lose Him again.' },

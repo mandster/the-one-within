@@ -24,6 +24,8 @@ import ReleasingMovement from '../screens/ReleasingMovement';
 import LayingDown from '../screens/LayingDown';
 import HeartBreathing from '../screens/HeartBreathing';
 import WalkingMeditation from '../screens/WalkingMeditation';
+import ProgressOverview from '../screens/ProgressOverview'; // ✅ Import
+
 
 import { useTheme, ThemeProvider } from '../theme/ThemeContext';
 
@@ -41,7 +43,8 @@ const HomeStack = () => (
     <Stack.Screen name="InquiryStage4" component={InquiryStage4} />
     <Stack.Screen name="InquiryStage5" component={InquiryStage5} />
     <Stack.Screen name="SettingsTab" component={SettingsStack} />
-  </Stack.Navigator>
+    <Stack.Screen name="ProgressOverview" component={ProgressOverview} />
+    </Stack.Navigator>
 );
 
 const EmbodiedPracticesStack = () => (
