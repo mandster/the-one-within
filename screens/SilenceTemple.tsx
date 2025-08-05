@@ -1,5 +1,3 @@
-// screens/SilenceTemple.tsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -16,13 +14,10 @@ import { createGlobalStyles } from '../theme/GlobalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import ProgressRing from '../components/ProgressRing'; // ✅ Ensure this is a default export
-
-const CIRCLE_LENGTH = 2 * Math.PI * 100;
+import ProgressRing from '../components/ProgressRing';
 
 export default function SilenceTemple() {
   const { theme, darkMode, toggleDarkMode, fontSizes } = useTheme();
-
   const styles = createGlobalStyles(theme);
 
   const [isSitting, setIsSitting] = useState(false);
@@ -81,7 +76,7 @@ export default function SilenceTemple() {
       );
       await sound.playAsync();
     } catch (e) {
-      console.log('Feedback error:', e);
+      console.warn('Sound/Haptic error:', e);
     }
   };
 
@@ -98,70 +93,67 @@ export default function SilenceTemple() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={styles.centeredContent}>
-        <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
+    <View style={styles.container}>
+      <View style={{ alignItems: 'center', marginBottom: 24 }}>
+        <Text style={[styles.title, { fontSize: fontSizes.xxl, color: theme.colors.gold }]}>
           Silence Temple
         </Text>
-        <Text style={[styles.subtitle, { color: theme.colors.text }]}>
-          Enter the Presence
-        </Text>
+        <Text style={[styles.text, { fontSize: fontSizes.md }]}>Enter the Presence</Text>
+      </View>
 
-        <View style={styles.circleContainer}>
-          <Animated.View
-            style={[
-              styles.outerGlow,
-              { transform: [{ scale: pulseAnim }] },
-            ]}
-          />
-          <TouchableOpacity
-            onPress={toggleSilence}
-            activeOpacity={0.8}
-            style={styles.silenceCard}
+      <View style={{ alignItems: 'center', marginBottom: 32 }}>
+        <Animated.View
+          style={[
+            styles.outerGlow,
+            { transform: [{ scale: pulseAnim }] },
+          ]}
+        />
+        <View style={styles.gradientCircleWrapper}>
+        <TouchableOpacity
+          onPress={toggleSilence}
+          activeOpacity={0.8}
+          style={styles.gradientCircleTouchable}
+        >
+          <LinearGradient
+            colors={['#f3e7e9', '#e3eeff']}
+            start={{ x: 0.1, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.gradientCircle}
           >
-            <LinearGradient
-              colors={['#f3e7e9', '#e3eeff']}
-              start={{ x: 0.1, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.gradientCircle}
-            >
-              <ProgressRing
-                progress={(elapsedSeconds % 60) / 60}
-                radius={100}
-                strokeWidth={4}
-                color={theme.colors.gold}
-              />
-              <View style={styles.innerCircle}>
-                <Text style={styles.buttonText}>
-                  {isSitting ? 'Pause' : 'Start'}
-                </Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
+            <ProgressRing
+              progress={(elapsedSeconds % 60) / 60}
+              radius={100}
+              strokeWidth={4}
+              color={theme.colors.gold}
+            />
+            <View style={styles.innerCircle}>
+              <Text style={styles.buttonText}>
+                {isSitting ? 'Pause' : 'Start'}
+              </Text>
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+      
 
-          {!isSitting && (
-            <Text style={styles.guidingText}>
-              Tap the circle to begin your silence
-            </Text>
-          )}
-        </View>
+        {!isSitting && (
+          <Text style={styles.guidingText}>Tap the circle to begin your silence</Text>
+        )}
+      </View>
 
-        <Text style={[styles.statText, { color: theme.colors.text }]}>
-          Current Session: {formatTime(elapsedSeconds)}
-        </Text>
-        <Text style={[styles.statText, { color: theme.colors.text }]}>
-          Total Time in Silence: {formatTime(totalSeconds)}
-        </Text>
+      <View style={{ alignItems: 'center', marginTop: 16, marginBottom: 12 }}>
+        <Text style={styles.statText}>Current Session: {formatTime(elapsedSeconds)}</Text>
+        <Text style={styles.statText}>Total Time in Silence: {formatTime(totalSeconds)}</Text>
+      </View>
 
-        <View style={styles.toggleRow}>
-          <Text style={{ color: theme.colors.text }}>Dark Mode</Text>
-          <Switch
-            value={darkMode}
-            onValueChange={toggleDarkMode}
-            trackColor={{ false: '#ccc', true: theme.colors.gold }}
-            thumbColor={darkMode ? theme.colors.text : '#f4f3f4'}
-          />
-        </View>
+      <View style={styles.toggleRow}>
+        <Text style={{ color: theme.colors.text }}>Dark Mode</Text>
+        <Switch
+          value={darkMode}
+          onValueChange={toggleDarkMode}
+          trackColor={{ false: '#ccc', true: theme.colors.gold }}
+          thumbColor={darkMode ? theme.colors.text : '#f4f3f4'}
+        />
       </View>
     </View>
   );

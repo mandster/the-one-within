@@ -39,12 +39,10 @@ export const createGlobalStyles = (theme: any) =>
       padding: spacing.md,
       backgroundColor: theme.colors.background,
     },
-
     scrollContainer: {
       paddingVertical: 20,
       paddingHorizontal: 16,
     },
-
     title: {
       fontSize: fontSizes.xl,
       fontWeight: fontWeights.bold,
@@ -52,14 +50,12 @@ export const createGlobalStyles = (theme: any) =>
       marginBottom: spacing.md,
       color: theme.colors.primary,
     },
-
     subHeading: {
       fontSize: fontSizes.lg,
       fontWeight: fontWeights.bold,
       textAlign: 'center',
       color: theme.colors.subHeading,
     },
-
     text: {
       fontSize: fontSizes.md,
       fontWeight: fontWeights.regular,
@@ -67,14 +63,12 @@ export const createGlobalStyles = (theme: any) =>
       lineHeight: 24,
       color: theme.colors.text,
     },
-
     textMuted: {
       fontSize: fontSizes.sm,
       color: theme.colors.textMuted,
       fontStyle: 'italic',
       textAlign: 'center',
     },
-
     button: {
       backgroundColor: theme.colors.surface,
       paddingVertical: spacing.sm,
@@ -87,19 +81,16 @@ export const createGlobalStyles = (theme: any) =>
       shadowRadius: 4,
       elevation: 3,
     },
-
     buttonText: {
       fontSize: fontSizes.md,
       fontWeight: fontWeights.medium,
       color: theme.colors.onSurface,
     },
-
     navBackButton: {
       marginTop: spacing.lg,
       alignSelf: 'flex-start',
       marginBottom: spacing.md,
     },
-
     card: {
       padding: spacing.md,
       borderRadius: borderRadius.md,
@@ -112,7 +103,6 @@ export const createGlobalStyles = (theme: any) =>
       shadowRadius: 10,
       elevation: 2,
     },
-
     cardGlass: {
       backgroundColor: '#ffffff10',
       borderRadius: borderRadius.md,
@@ -123,14 +113,12 @@ export const createGlobalStyles = (theme: any) =>
       shadowOpacity: 0.2,
       shadowRadius: 20,
     },
-
     glow: {
       shadowColor: '#fff',
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 0.3,
       shadowRadius: 20,
     },
-
     practiceButton: {
       paddingVertical: 12,
       paddingHorizontal: 16,
@@ -140,13 +128,11 @@ export const createGlobalStyles = (theme: any) =>
       borderColor: theme.colors.primary,
       marginBottom: 12,
     },
-
     practiceTitle: {
       fontSize: 16,
       fontWeight: '600',
       color: theme.colors.primary,
     },
-
     bubble: {
       paddingVertical: 12,
       paddingHorizontal: 20,
@@ -159,14 +145,12 @@ export const createGlobalStyles = (theme: any) =>
       shadowRadius: 4,
       elevation: 4,
     },
-
     bubbleText: {
       color: '#fff',
       fontSize: fontSizes.sm,
       fontWeight: fontWeights.bold,
       textAlign: 'center',
     },
-
     bubbleWrap: {
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -175,26 +159,22 @@ export const createGlobalStyles = (theme: any) =>
       paddingHorizontal: 16,
       gap: 12,
     },
-
     guidingText: {
       fontSize: fontSizes.sm,
       color: '#aaa',
       textAlign: 'center',
       marginTop: spacing.sm,
     },
-
     progressText: {
       fontSize: fontSizes.sm,
       color: theme.colors.text,
       textAlign: 'center',
       marginTop: 8,
     },
-
     statText: {
       fontSize: fontSizes.sm,
       color: theme.colors.textMuted,
     },
-
     shadow: {
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
@@ -207,7 +187,6 @@ export const createGlobalStyles = (theme: any) =>
       paddingHorizontal: 20,
       alignItems: 'center',
     },
-    
     card: {
       width: '100%',
       padding: 20,
@@ -222,19 +201,16 @@ export const createGlobalStyles = (theme: any) =>
       shadowRadius: 20,
       elevation: 8,
     },
-    
     cardTitle: {
       textAlign: 'center',
       fontWeight: '600',
       marginTop: 10,
     },
-    
     cardDescription: {
       textAlign: 'center',
       marginTop: 4,
       fontWeight: '300',
     },
-    
     button: {
       backgroundColor: 'rgba(255,255,255,0.25)',
       paddingVertical: 12,
@@ -248,7 +224,6 @@ export const createGlobalStyles = (theme: any) =>
       shadowOpacity: 0.1,
       shadowRadius: 12,
     },
-    
     buttonText: {
       color: '#000',
       fontWeight: '500',
@@ -269,6 +244,56 @@ export const createGlobalStyles = (theme: any) =>
       elevation: 10,
       backdropFilter: 'blur(20px)', // web only
     },
+    gradientCircle: {
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.2,
+      shadowRadius: 8,
+      elevation: 5,
+      overflow: 'hidden', // ✅ key line to clip the gradient border
+    },
+    gradientCircleWrapper: {
+      borderRadius: 100,
+      overflow: 'hidden',
+      alignSelf: 'center',
+    },
+    
+    gradientCircleTouchable: {
+      borderRadius: 100,
+      overflow: 'hidden',
+    },
     
     
+    innerCircle: {
+      position: 'absolute',
+      width: 160,
+      height: 160,
+      borderRadius: 80,
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backdropFilter: 'blur(10px)', // Works on web
+    },
+    
+    outerGlow: {
+      position: 'absolute',
+      width: 240,
+      height: 240,
+      borderRadius: 120,
+      backgroundColor: 'rgba(255, 223, 128, 0.15)',
+      shadowColor: '#ffdf80',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.4,
+      shadowRadius: 25,
+      zIndex: -1,
+      alignSelf: 'center',
+    },
+    toggleRow:{
+      alignItems:'center'
+    },
   });
