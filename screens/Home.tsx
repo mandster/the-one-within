@@ -1,10 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../theme/ThemeContext';
-import { CardStyles } from '../theme/CardStyles';
-import { createGlobalStyles } from '../theme/GlobalStyles';
+import React from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../components/GlassCard';
+import { createGlobalStyles } from '../theme/GlobalStyles';
+import { useTheme } from '../theme/ThemeContext';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -56,7 +55,7 @@ export default function HomeScreen() {
         {/* Welcome Message */}
         <View style={styles.welcomeContainer}>
           <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
-            Welcome to the Inner Journey
+           The One Within
           </Text>
           <Text style={[styles.subtitle, { color: theme.colors.text, fontSize: fontSizes.lg }]}>
             Your companion for spiritual growth and self-discovery.

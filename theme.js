@@ -36,8 +36,8 @@ export const theme = {
   };
   
   // ThemeContext.tsx
-  import React, { createContext, useContext, useState, ReactNode } from 'react';
-  import { theme as baseTheme } from './theme';
+  import { createContext, useContext } from 'react';
+import { theme as baseTheme } from './theme';
   
   const ThemeContext = createContext({
     isDark: true,
@@ -46,54 +46,5 @@ export const theme = {
   });
   
   export const useTheme = () => useContext(ThemeContext);
+ 
   
-  export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-    const [isDark, setIsDark] = useState(true);
-  
-    const toggleTheme = () => setIsDark((prev) => !prev);
-  
-    const theme = {
-      ...baseTheme,
-      colors: {
-        ...baseTheme.colors,
-        background: isDark ? baseTheme.colors.dark : baseTheme.colors.white,
-        text: isDark ? baseTheme.colors.text : baseTheme.colors.dark,
-        card: isDark ? baseTheme.colors.card : '#f5f5f5',
-      },
-    };
-  
-    return (
-      <ThemeContext.Provider value={{ isDark, toggleTheme, theme }}>
-        {children}
-      </ThemeContext.Provider>
-    );
-  };
-  
-  // GlobalStyles.ts
-  import { StyleSheet } from 'react-native';
-  import { theme } from './theme';
-  
-  export const GlobalStyles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: theme.colors.background,
-      paddingHorizontal: theme.spacing.lg,
-      paddingTop: theme.spacing.xl,
-    },
-    title: {
-      fontSize: theme.fontSizes.xl,
-      fontWeight: '600',
-      color: theme.colors.gold,
-      marginBottom: theme.spacing.md,
-    },
-    text: {
-      fontSize: theme.fontSizes.md,
-      color: theme.colors.text,
-    },
-    card: {
-      backgroundColor: theme.colors.card,
-      borderRadius: theme.radius.md,
-      padding: theme.spacing.md,
-      marginBottom: theme.spacing.md,
-    },
-  });

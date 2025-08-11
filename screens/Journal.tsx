@@ -1,18 +1,18 @@
 // screens/Journal.tsx
-import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 import {
-  View,
+  Alert,
+  FlatList,
+  Keyboard,
   Text,
   TextInput,
   TouchableOpacity,
-  FlatList,
-  Alert,
-  Keyboard,
+  View,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTheme } from '../theme/ThemeContext';
-import { createGlobalStyles } from '../theme/GlobalStyles';
 import uuid from 'react-native-uuid';
+import { createGlobalStyles } from '../theme/GlobalStyles';
+import { useTheme } from '../theme/ThemeContext';
 
 interface JournalEntry {
   id: string;
@@ -115,10 +115,11 @@ const Journal = () => {
   };
 
   // ✅ Safer filtering
-  const filteredEntries = (entries || []).filter((entry) => {
-    const entryText = typeof entry?.text === 'string' ? entry.text : '';
-    return entryText.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+const filteredEntries = entries.filter(e =>
+  e.text.toLowerCase().includes(searchQuery.toLowerCase())
+  || e.date.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
 
   return (
     <View style={styles.container}>

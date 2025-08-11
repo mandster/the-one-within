@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-  Easing,
-  Switch,
-  Platform,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from '../theme/ThemeContext';
-import { createGlobalStyles } from '../theme/GlobalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  Easing,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import ProgressRing from '../components/ProgressRing';
+import { createGlobalStyles } from '../theme/GlobalStyles';
+import { useTheme } from '../theme/ThemeContext';
 
 export default function SilenceTemple() {
   const { theme, darkMode, toggleDarkMode, fontSizes } = useTheme();
@@ -146,15 +145,7 @@ export default function SilenceTemple() {
         <Text style={styles.statText}>Total Time in Silence: {formatTime(totalSeconds)}</Text>
       </View>
 
-      <View style={styles.toggleRow}>
-        <Text style={{ color: theme.colors.text }}>Dark Mode</Text>
-        <Switch
-          value={darkMode}
-          onValueChange={toggleDarkMode}
-          trackColor={{ false: '#ccc', true: theme.colors.gold }}
-          thumbColor={darkMode ? theme.colors.text : '#f4f3f4'}
-        />
-      </View>
+     
     </View>
   );
 }
