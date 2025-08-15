@@ -1,48 +1,51 @@
-// hooks/useSoundPlayer.ts
-import { useCallback, useRef } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { Audio } from 'expo-av';
+import { Audio, AVPlaybackSource, Sound } from 'expo-av';
+import { useEffect, useRef } from 'react';
 
-export const useSoundPlayer = (soundFile: any, isSoundOn: boolean) => {
-  const soundRef = useRef<Audio.Sound | null>(null);
+export function useSoundPlayer(source: AVPlaybackSource, shouldPlay: boolean) {
+  const soundRef = useRef<Sound | null>(null);
 
-  const playSound = async () => {
-    try {
-      if (soundRef.current) {
-        await soundRef.current.unloadAsync();
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const { sound } = await Audio.Sound.createAsync(source, { isLooping: true, volume: 0.5 });
+      if (!mounted) {
+        await sound.unloadAsync();
+        return;
       }
-      const { sound } = await Audio.Sound.createAsync(soundFile, {
-        isLooping: true,
-        volume: 0.4,
-      });
       soundRef.current = sound;
-      await sound.playAsync();
-    } catch (error) {
-      console.warn('Failed to play sound:', error);
-    }
-  };
+      if (shouldPlay) await sound.playAsync();
+    })();
 
-  const stopSound = async () => {
-    try {
+    return () => {
+      mounted = false;
       if (soundRef.current) {
-        await soundRef.current.stopAsync();
-        await soundRef.current.unloadAsync();
+        soundRef.current.unloadAsync();
         soundRef.current = null;
       }
-    } catch (error) {
-      console.warn('Failed to stop sound:', error);
+    };
+  }, [source]);
+
+  useEffect(() => {
+    (async () => {
+      if (!soundRef.current) return;
+      if (shouldPlay) await soundRef.current.playAsync();
+      else await soundRef.current.pauseAsync();
+    })();
+  }, [shouldPlay]);
+
+  const play = async () => {
+    if (soundRef.current && !shouldPlay) {
+      await soundRef.current.playAsync();
     }
   };
 
-  // Start/stop when screen is focused/unfocused
-  useFocusEffect(
-    useCallback(() => {
-      if (isSoundOn) playSound();
-      return () => {
-        stopSound();
-      };
-    }, [isSoundOn])
-  );
+  const stop = async () => {
+    if (soundRef.current) {
+      await soundRef.current.stopAsync();
+      await soundRef.current.unloadAsync();
+      soundRef.current = null;
+    }
+  };
 
-  return { stopSound, playSound }; // Optional external control
-};
+  return { play, stop };
+}

@@ -1,5 +1,5 @@
 // theme/themes.ts
-export const lightTheme = {
+export const lightTheme1 = {
     colors: {
       background: '#F6F9FC',
       surface: '#FFAD8A',
@@ -18,15 +18,23 @@ export const lightTheme = {
       family: 'System',
     },
   };
-  
-  
+
+
+  export const lightTheme = {
+    colors: {
+    background: '#704214',
+    surface: '#ffffff',
+    text: '#ffffff',
+    muted: '#999999',
+    gold: '#ffb347',
+    }
+  }
   export const darkTheme = {
     colors: {
-      background: '#004040',
-      surface: '#ffffff',
-      text: '#ffffff',
-      muted: '#999999',
-      gold: '#ffb347',
+    background: '#4A2A0A',
+    surface: '#ffffff',
+    text: '#ffffff',
+    muted: '#999999',
+    gold: '#ffb347',
     },
-  };
-  
+  };  

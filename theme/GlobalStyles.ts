@@ -1,5 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
+// Define theme interface for type safety
+interface Theme {
+  colors: {
+    background: string;
+    primary: string;
+    subHeading: string;
+    text: string;
+    textMuted: string;
+    surface: string;
+    onSurface: string;
+  };
+}
+
+// Design System Tokens
 export const fontSizes = {
   xs: 12,
   sm: 14,
@@ -7,14 +21,14 @@ export const fontSizes = {
   lg: 20,
   xl: 24,
   xxl: 32,
-};
+} as const;
 
 export const fontWeights = {
   light: '300',
   regular: '400',
   medium: '500',
   bold: '700',
-};
+} as const;
 
 export const spacing = {
   xs: 4,
@@ -23,52 +37,81 @@ export const spacing = {
   lg: 24,
   xl: 32,
   xxl: 48,
-};
+} as const;
 
 export const borderRadius = {
   sm: 8,
   md: 16,
   lg: 32,
   full: 999,
-};
+} as const;
 
-export const createGlobalStyles = (theme: any) =>
+// Global Stylesheet Factory
+export const createGlobalStyles = (theme: Theme) =>
   StyleSheet.create({
+    // Base Layout
     container: {
       flex: 1,
       padding: spacing.md,
       backgroundColor: theme.colors.background,
-    },
-    scrollContainer: {
-      paddingVertical: 20,
-      paddingHorizontal: 16,
-    },
+    } as ViewStyle,
+    scrollViewContent: {
+      paddingVertical: spacing.xl,
+      paddingHorizontal: spacing.md,
+      alignItems: 'center',
+    } as ViewStyle,
+    centeredContent: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: spacing.md,
+      paddingHorizontal: spacing.md,
+    } as ViewStyle,
+
+    // Text Styles
     title: {
       fontSize: fontSizes.xl,
       fontWeight: fontWeights.bold,
       textAlign: 'center',
       marginBottom: spacing.md,
       color: theme.colors.primary,
-    },
+    } as TextStyle,
     subHeading: {
       fontSize: fontSizes.lg,
       fontWeight: fontWeights.bold,
       textAlign: 'center',
       color: theme.colors.subHeading,
-    },
+    subtitle: {
+      fontSize: fontSizes.md,
+      color: theme.colors.text,
+      textAlign: 'center',
+      marginBottom: spacing.sm,
+    } as TextStyle,
     text: {
       fontSize: fontSizes.md,
       fontWeight: fontWeights.regular,
       textAlign: 'center',
-      lineHeight: 24,
+      lineHeight: fontSizes.md * 1.5,
       color: theme.colors.text,
-    },
+    } as TextStyle,
     textMuted: {
       fontSize: fontSizes.sm,
       color: theme.colors.textMuted,
       fontStyle: 'italic',
       textAlign: 'center',
-    },
+    } as TextStyle,
+    guidingText: {
+      fontSize: fontSizes.sm,
+      color: theme.colors.textMuted,
+      textAlign: 'center',
+      marginTop: spacing.sm,
+    } as TextStyle,
+    statText: {
+      fontSize: fontSizes.sm,
+      color: theme.colors.textMuted,
+    } as TextStyle,
+
+    // Buttons
     button: {
       backgroundColor: theme.colors.surface,
       paddingVertical: spacing.sm,
@@ -77,173 +120,102 @@ export const createGlobalStyles = (theme: any) =>
       alignItems: 'center',
       marginVertical: spacing.sm,
       shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.08,
       shadowRadius: 4,
       elevation: 3,
-    },
+    } as ViewStyle,
     buttonText: {
       fontSize: fontSizes.md,
       fontWeight: fontWeights.medium,
       color: theme.colors.onSurface,
-    },
+    } as TextStyle,
     navBackButton: {
       marginTop: spacing.lg,
       alignSelf: 'flex-start',
       marginBottom: spacing.md,
-    },
-    card: {
-      padding: spacing.md,
-      borderRadius: borderRadius.md,
-      backgroundColor: '#ffffff15',
-      marginVertical: spacing.sm,
-      borderColor: '#ffffff30',
-      borderWidth: 1,
-      shadowColor: '#000',
-      shadowOpacity: 0.05,
-      shadowRadius: 10,
-      elevation: 2,
-    },
-    cardGlass: {
-      backgroundColor: '#ffffff10',
-      borderRadius: borderRadius.md,
-      borderWidth: 1,
-      borderColor: '#ffffff22',
-      shadowColor: '#fff',
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.2,
-      shadowRadius: 20,
-    },
-    glow: {
-      shadowColor: '#fff',
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.3,
-      shadowRadius: 20,
-    },
-    practiceButton: {
-      paddingVertical: 12,
-      paddingHorizontal: 16,
-      borderRadius: 20,
-      backgroundColor: theme.colors.surface,
-      borderWidth: 1,
-      borderColor: theme.colors.primary,
-      marginBottom: 12,
-    },
-    practiceTitle: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: theme.colors.primary,
-    },
-    bubble: {
-      paddingVertical: 12,
-      paddingHorizontal: 20,
-      borderRadius: 999,
-      margin: 6,
-      backgroundColor: '#ffffff22',
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowOffset: { width: 2, height: 2 },
-      shadowRadius: 4,
-      elevation: 4,
-    },
-    bubbleText: {
-      color: '#fff',
-      fontSize: fontSizes.sm,
-      fontWeight: fontWeights.bold,
-      textAlign: 'center',
-    },
-    bubbleWrap: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      marginTop: 20,
-      paddingHorizontal: 16,
-      gap: 12,
-    },
-    guidingText: {
-      fontSize: fontSizes.sm,
-      color: '#aaa',
-      textAlign: 'center',
-      marginTop: spacing.sm,
-    },
-    progressText: {
-      fontSize: fontSizes.sm,
-      color: theme.colors.text,
-      textAlign: 'center',
-      marginTop: 8,
-    },
-    statText: {
-      fontSize: fontSizes.sm,
-      color: theme.colors.textMuted,
-    },
-    shadow: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.12,
-      shadowRadius: 6,
-      elevation: 4,
-    },
-    scrollViewContent: {
-      paddingVertical: 40,
-      paddingHorizontal: 20,
-      alignItems: 'center',
-    },
+    } as ViewStyle,
+
+    // Cards
     card: {
       width: '100%',
-      padding: 20,
-      borderRadius: 20,
+      padding: spacing.md,
+      borderRadius: borderRadius.md,
       borderWidth: 1,
-      marginVertical: 10,
-      backdropFilter: 'blur(15px)',
-      backgroundColor: 'rgba(255,255,255,0.2)',
+      borderColor: 'rgba(255,255,255,0.3)',
+      backgroundColor: 'rgba(255,255,255,0.15)',
+      marginVertical: spacing.sm,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 8 },
       shadowOpacity: 0.1,
       shadowRadius: 20,
       elevation: 8,
-    },
+    } as ViewStyle,
     cardTitle: {
       textAlign: 'center',
-      fontWeight: '600',
-      marginTop: 10,
-    },
+      fontWeight: fontWeights.medium,
+      fontSize: fontSizes.md,
+      marginTop: spacing.sm,
+      color: theme.colors.text,
+    } as TextStyle,
     cardDescription: {
       textAlign: 'center',
-      marginTop: 4,
-      fontWeight: '300',
-    },
-    button: {
-      backgroundColor: 'rgba(255,255,255,0.25)',
-      paddingVertical: 12,
-      paddingHorizontal: 24,
-      borderRadius: 16,
-      alignItems: 'center',
+      marginTop: spacing.xs,
+      fontWeight: fontWeights.light,
+      fontSize: fontSizes.sm,
+      color: theme.colors.textMuted,
+    } as TextStyle,
+
+    // Practice-Specific Buttons
+    practiceButton: {
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+      borderRadius: borderRadius.md,
+      backgroundColor: theme.colors.surface,
       borderWidth: 1,
-      borderColor: '#ddd',
+      borderColor: theme.colors.primary,
+      marginBottom: spacing.sm,
+    } as ViewStyle,
+    practiceTitle: {
+      fontSize: fontSizes.md,
+      fontWeight: fontWeights.medium,
+      color: theme.colors.primary,
+    } as TextStyle,
+
+    // Bubbles
+    bubbleWrap: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      marginTop: spacing.md,
+      paddingHorizontal: spacing.md,
+      gap: spacing.sm,
+    } as ViewStyle,
+    bubble: {
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+      borderRadius: borderRadius.full,
+      margin: spacing.xs,
+      backgroundColor: 'rgba(255,255,255,0.22)',
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
+      shadowOffset: { width: 2, height: 2 },
       shadowOpacity: 0.1,
-      shadowRadius: 12,
-    },
-    buttonText: {
-      color: '#000',
-      fontWeight: '500',
-      fontSize: 16,
-    },
-    tabBarStyle: {
-      position: 'absolute',
-      backgroundColor: 'rgba(255, 255, 255, 0.15)',
-      borderTopWidth: 0,
-      marginHorizontal: 20,
-      marginBottom: 20,
-      borderRadius: 24,
-      height: 70,
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowOffset: { width: 0, height: 6 },
-      shadowRadius: 20,
-      elevation: 10,
-      backdropFilter: 'blur(20px)', // web only
-    },
+      shadowRadius: 4,
+      elevation: 4,
+    } as ViewStyle,
+    bubbleText: {
+      color: theme.colors.text,
+      fontSize: fontSizes.sm,
+      fontWeight: fontWeights.bold,
+      textAlign: 'center',
+    } as TextStyle,
+
+    // Reusable Circle UI
+    circleContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.sm,
+    } as ViewStyle,
     gradientCircle: {
       width: 200,
       height: 200,
@@ -255,67 +227,34 @@ export const createGlobalStyles = (theme: any) =>
       shadowOpacity: 0.2,
       shadowRadius: 8,
       elevation: 5,
-      overflow: 'hidden', // ✅ key line to clip the gradient border
-    },
-    gradientCircleWrapper: {
-      borderRadius: 100,
-      overflow: 'hidden',
-      alignSelf: 'center',
-    },
-    
-    gradientCircleTouchable: {
-      borderRadius: 100,
-      overflow: 'hidden',
-    },
-    responsiveCardRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap', // allow wrapping on small screens
-      justifyContent: 'center',
-      gap: spacing.md,
-      marginVertical: spacing.lg,
-    },
-    
-    responsiveCard: {
-      width: 160, // fixed width for consistency
-      maxWidth: '45%', // responsive max width
-      padding: spacing.md,
-      borderRadius: borderRadius.md,
-      backgroundColor: 'rgba(255,255,255,0.15)',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: spacing.md,
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowOffset: { width: 0, height: 6 },
-      shadowRadius: 8,
-    },
-        
-    
-    innerCircle: {
-      position: 'absolute',
-      width: 160,
-      height: 160,
-      borderRadius: 80,
-      backgroundColor: 'rgba(255, 255, 255, 0.15)',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backdropFilter: 'blur(10px)', // Works on web
-    },
-    
+    } as ViewStyle,
     outerGlow: {
       position: 'absolute',
       width: 240,
       height: 240,
       borderRadius: 120,
-      backgroundColor: 'rgba(255, 223, 128, 0.15)',
+      backgroundColor: 'rgba(255,223,128,0.15)',
       shadowColor: '#ffdf80',
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 0.4,
       shadowRadius: 25,
-      zIndex: -1,
-      alignSelf: 'center',
-    },
-    toggleRow:{
-      alignItems:'center'
-    },
+      elevation: 0,
+    } as ViewStyle,
+    innerCircle: {
+      position: 'absolute',
+      width: 160,
+      height: 160,
+      borderRadius: 80,
+      backgroundColor: 'rgba(255,255,255,0.15)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    } as ViewStyle,
+
+    // UI Controls
+    toggleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      marginTop: spacing.md,
+    } as ViewStyle,
   });
