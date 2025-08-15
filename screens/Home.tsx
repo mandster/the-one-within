@@ -11,60 +11,28 @@ export default function HomeScreen() {
   const styles = createGlobalStyles(theme);
 
   const appSections = [
-    {
-      name: 'Inquiry',
-      description: 'Who is the One Within?',
-      route: 'InquiryStagesMenu',
-      icon: '🔍',
-    },
-    {
-      name: 'Journal Your Insights',
-      description: 'Record your realizations and reflections.',
-      route: 'JournalTab',
-      icon: '📝',
-    },
-    {
-      name: 'Embodied Practices',
-      description: 'Engage in practices for inner balance.',
-      route: 'EmbodiedTab',
-      icon: '🧘‍♀️',
-    },
-    {
-      name: 'Silence Temple',
-      description: 'Find peace and quiet contemplation.',
-      route: 'SilenceTab',
-      icon: '🌑',
-    },
-    {
-      name: 'Saints Library',
-      description: 'Explore wisdom from enlightened beings.',
-      route: 'SaintsTab',
-      icon: '📖',
-    },
-    {
-      name: 'Settings',
-      description: 'Theme preferences & more.',
-      route: 'SettingsTab',
-      icon: '⚙️',
-    },
+    { name: 'Inquiry',              description: 'Who is the One Within?',           route: 'InquiryStagesMenu', icon: '🔍' },
+    { name: 'Journal Your Insights',description: 'Record your realizations and reflections.', route: 'JournalTab', icon: '📝' },
+    { name: 'Embodied Practices',   description: 'Engage in practices for inner balance.',    route: 'EmbodiedTab', icon: '🧘‍♀️' },
+    { name: 'Silence Temple',       description: 'Find peace and quiet contemplation.',       route: 'SilenceTab',  icon: '🌑' },
+    { name: 'Saints Library',       description: 'Explore wisdom from enlightened beings.',   route: 'SaintsTab',   icon: '📖' },
+    { name: 'Settings',             description: 'Theme preferences & more.',                 route: 'SettingsTab', icon: '⚙️' },
   ];
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {/* Welcome Message */}
+        {/* Welcome */}
         <View style={styles.welcomeContainer}>
           <Text style={[styles.title, { color: theme.colors.gold, fontSize: fontSizes.xxl }]}>
-           The One Within
+            The One Within
           </Text>
           <Text style={[styles.subtitle, { color: theme.colors.text, fontSize: fontSizes.lg }]}>
             Your companion for spiritual growth and self-discovery.
           </Text>
         </View>
 
-        {/* App Sections */}
-
-        
+        {/* Sections */}
         <View style={styles.cardsContainer}>
           {appSections.map((section, index) => (
             <GlassCard
@@ -75,7 +43,7 @@ export default function HomeScreen() {
               onPress={() => navigation.navigate(section.route as never)}
             />
           ))}
-        
+
           <TouchableOpacity
             style={[styles.button, { marginTop: 20 }]}
             onPress={() => navigation.navigate('ProgressOverview' as never)}
@@ -83,8 +51,6 @@ export default function HomeScreen() {
             <Text style={styles.buttonText}>📈 View Your Progress</Text>
           </TouchableOpacity>
         </View>
-        
-
       </ScrollView>
     </View>
   );

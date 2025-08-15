@@ -1,6 +1,6 @@
 // theme/ThemeContext.tsx
-import React, { createContext, useContext, useState, useMemo } from 'react';
-import { lightTheme, darkTheme } from './themes';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { darkTheme, lightTheme } from './themes';
 
 type ThemeContextType = {
   theme: typeof lightTheme;
@@ -42,6 +42,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       textMuted: '#6b7280',
       primary: '#007f5c',
       tabHighlight: 'rgba(255,255,255,0.3)',
+      tabBackground:'ffffff',
     },
   };
 
