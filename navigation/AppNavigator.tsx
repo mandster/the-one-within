@@ -1,38 +1,36 @@
 // navigation/AppNavigator.tsx
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, Platform } from 'react-native';
+import React from 'react';
 
+// Screens
 import HomeScreen from '../screens/Home';
-import InquiryStagesMenu from '../screens/InquiryStagesMenu';
 import InquiryStage1 from '../screens/InquiryStage1';
 import InquiryStage2 from '../screens/InquiryStage2';
 import InquiryStage3 from '../screens/InquiryStage3';
 import InquiryStage4 from '../screens/InquiryStage4';
 import InquiryStage5 from '../screens/InquiryStage5';
+import InquiryStagesMenu from '../screens/InquiryStagesMenu';
 
-import Settings from '../screens/Settings';
 import Journal from '../screens/Journal';
 import SaintsLibrary from '../screens/SaintsLibrary';
+import Settings from '../screens/Settings';
 import SilenceTemple from '../screens/SilenceTemple';
 
 import EmbodiedPracticeHome from '../screens/EmbodiedPracticeHome';
-import StillSitting from '../screens/StillSitting';
-import ReleasingMovement from '../screens/ReleasingMovement';
-import LayingDown from '../screens/LayingDown';
 import HeartBreathing from '../screens/HeartBreathing';
+import LayingDown from '../screens/LayingDown';
+import ProgressOverview from '../screens/ProgressOverview';
+import ReleasingMovement from '../screens/ReleasingMovement';
+import StillSitting from '../screens/StillSitting';
 import WalkingMeditation from '../screens/WalkingMeditation';
-import ProgressOverview from '../screens/ProgressOverview'; // ✅ Import
 
-
-import { useTheme, ThemeProvider } from '../theme/ThemeContext';
+import { ThemeProvider } from '../theme/ThemeContext';
+import MainTabs from './MainTabs';
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
-// --- Stack Navigators ---
+// --- Stack Navigators (unchanged) ---
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={HomeScreen} />
@@ -44,7 +42,7 @@ const HomeStack = () => (
     <Stack.Screen name="InquiryStage5" component={InquiryStage5} />
     <Stack.Screen name="SettingsTab" component={SettingsStack} />
     <Stack.Screen name="ProgressOverview" component={ProgressOverview} />
-    </Stack.Navigator>
+  </Stack.Navigator>
 );
 
 const EmbodiedPracticesStack = () => (
@@ -82,54 +80,18 @@ const SaintsLibraryStack = () => (
   </Stack.Navigator>
 );
 
-// --- Tab Navigator ---
-const MainTabNavigator = () => {
-  const { theme } = useTheme();
-
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: theme.colors.background,
-          borderTopColor: theme.colors.gold,
-          borderTopWidth: 1,
-          height: 60,
-          paddingBottom: Platform.OS === 'ios' ? 10 : 5,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
-        },
-        tabBarActiveTintColor: theme.colors.gold,
-        tabBarInactiveTintColor: theme.colors.muted,
-        tabBarIcon: ({ focused, color, size }) => {
-          const icons: Record<string, string> = {
-            HomeTab: focused ? '🏡' : '🏠',
-            JournalTab: focused ? '📝' : '📄',
-            EmbodiedTab: focused ? '🧘‍♀️' : '🧘',
-            SilenceTab: focused ? '🌑' : '🌙',
-            SaintsTab: focused ? '📖' : '📚',
-          };
-          return <Text style={{ color, fontSize: size }}>{icons[route.name]}</Text>;
-        },
-      })}
-    >
-      <Tab.Screen name="HomeTab" component={HomeStack} options={{ title: 'Home' }} />
-      <Tab.Screen name="JournalTab" component={JournalStack} options={{ title: 'Journal' }} />
-      <Tab.Screen name="EmbodiedTab" component={EmbodiedPracticesStack} options={{ title: 'Practices' }} />
-      <Tab.Screen name="SilenceTab" component={SilenceTempleStack} options={{ title: 'Silence' }} />
-      <Tab.Screen name="SaintsTab" component={SaintsLibraryStack} options={{ title: 'Saints' }} />
-    </Tab.Navigator>
-  );
-};
-
 // --- Root Navigator ---
 export default function AppNavigator() {
   return (
     <ThemeProvider>
       <NavigationContainer>
-        <MainTabNavigator />
+        <MainTabs
+          HomeStack={HomeStack}
+          JournalStack={JournalStack}
+          EmbodiedPracticesStack={EmbodiedPracticesStack}
+          SilenceTempleStack={SilenceTempleStack}
+          SaintsLibraryStack={SaintsLibraryStack}
+        />
       </NavigationContainer>
     </ThemeProvider>
   );

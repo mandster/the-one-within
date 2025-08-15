@@ -20,15 +20,19 @@ export const lightTheme1 = {
   };
 
 
-  export const lightTheme = {
-    colors: {
+export const lightTheme = {
+  colors: {
+    // ... other colors remain the same for now
     background: '#704214',
     surface: '#ffffff',
     text: '#ffffff',
-    muted: '#999999',
+    muted: '#b3a99d', // A softer, more elegant muted color
     gold: '#ffb347',
-    }
+    tabBackground: '#1e1c18', // A deep, rich charcoal gray
+    tabsBorder: 'transparent', // Remove the border for a cleaner look
+    activeTabGlow: '#fff', // A light color for the glow effect
   }
+};
   export const darkTheme = {
     colors: {
     background: '#4A2A0A',
