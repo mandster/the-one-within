@@ -267,7 +267,29 @@ export const createGlobalStyles = (theme: any) =>
       borderRadius: 100,
       overflow: 'hidden',
     },
+    responsiveCardRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap', // allow wrapping on small screens
+      justifyContent: 'center',
+      gap: spacing.md,
+      marginVertical: spacing.lg,
+    },
     
+    responsiveCard: {
+      width: 160, // fixed width for consistency
+      maxWidth: '45%', // responsive max width
+      padding: spacing.md,
+      borderRadius: borderRadius.md,
+      backgroundColor: 'rgba(255,255,255,0.15)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.md,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 6 },
+      shadowRadius: 8,
+    },
+        
     
     innerCircle: {
       position: 'absolute',
