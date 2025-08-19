@@ -11,6 +11,7 @@ import InquiryStage3 from '../screens/InquiryStage3';
 import InquiryStage4 from '../screens/InquiryStage4';
 import InquiryStage5 from '../screens/InquiryStage5';
 import InquiryStagesMenu from '../screens/InquiryStagesMenu';
+import MoodWizardModal from '../components/MoodWizardModal';
 
 import Journal from '../screens/Journal';
 import SaintsLibrary from '../screens/SaintsLibrary';

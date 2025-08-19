@@ -7,12 +7,14 @@ interface Theme {
     background: string;
     surface: string;
     text: string;
-    muted?: string;           // optional in your current theme snippet
-    gold?: string;            // optional in your current theme snippet
-    primary?: string;         // used by titles; we’ll default to gold or text
-    subHeading?: string;      // used by subHeading; default to muted or text
-    textMuted?: string;       // default to muted
-    onSurface?: string;       // default to text
+    muted?: string;          // optional
+    gold?: string;           // optional
+    primary?: string;        // optional
+    subHeading?: string;     // optional
+    textMuted?: string;      // optional
+    onSurface?: string;      // optional
+    tabBackground?: string;  // optional
+    tabsBorder?: string;     // optional
   };
 }
 
@@ -22,7 +24,7 @@ export const fontWeights = { light:'300', regular:'400', medium:'500', bold:'700
 export const spacing    = { xs:4,  sm:8,  md:16, lg:24, xl:32, xxl:48 } as const;
 export const borderRadius = { sm:8, md:16, lg:32, full:999 } as const;
 
-// ---- Style factory with safe fallbacks (so your palette can stay minimal) ----
+// ---- Style factory with safe fallbacks ----
 export const createGlobalStyles = (theme: Theme) => {
   const c = {
     ...theme.colors,
@@ -31,6 +33,8 @@ export const createGlobalStyles = (theme: Theme) => {
     textMuted:  theme.colors.textMuted  ?? theme.colors.muted ?? '#9CA3AF',
     onSurface:  theme.colors.onSurface  ?? theme.colors.text,
     gold:       theme.colors.gold       ?? '#ffb347',
+    tabBackground: theme.colors.tabBackground ?? 'rgba(0,0,0,0.2)',
+    tabsBorder:    theme.colors.tabsBorder    ?? 'rgba(255,255,255,0.18)',
   };
 
   const glassBorder = 'rgba(255,255,255,0.12)';
@@ -84,7 +88,7 @@ export const createGlobalStyles = (theme: Theme) => {
       fontSize: fontSizes.lg,
       fontWeight: fontWeights.bold,
       textAlign: 'center',
-      color: colors.subHeading,
+      color: c.subHeading, // ✅ fixed (was colors.subHeading)
     } as TextStyle,
 
     subtitle: {
@@ -134,7 +138,6 @@ export const createGlobalStyles = (theme: Theme) => {
       shadowOpacity: 0.08,
       shadowRadius: 4,
       elevation: 3,
-      // subtle glass feel on web only
       ...(Platform.OS === 'web' ? { backdropFilter: 'blur(8px)' as any } : {}),
     } as ViewStyle,
 
@@ -150,7 +153,7 @@ export const createGlobalStyles = (theme: Theme) => {
       marginBottom: spacing.md,
     } as ViewStyle,
 
-    // ===== Glass Cards (used by GlassCard & Home) =====
+    // ===== Glass Cards =====
     card: {
       width: '100%',
       padding: spacing.md,
@@ -164,7 +167,9 @@ export const createGlobalStyles = (theme: Theme) => {
       shadowOpacity: 0.1,
       shadowRadius: 20,
       elevation: 8,
-      ...(Platform.OS === 'web' ? { backdropFilter: 'blur(12px)' as any, WebkitBackdropFilter: 'blur(12px)' } : {}),
+      ...(Platform.OS === 'web'
+        ? { backdropFilter: 'blur(12px)' as any, WebkitBackdropFilter: 'blur(12px)' }
+        : {}),
     } as ViewStyle,
 
     cardTitle: {
@@ -249,7 +254,7 @@ export const createGlobalStyles = (theme: Theme) => {
       shadowOpacity: 0.2,
       shadowRadius: 8,
       elevation: 5,
-      overflow: 'hidden', // keeps the circle visually round
+      overflow: 'hidden',
     } as ViewStyle,
 
     outerGlow: {

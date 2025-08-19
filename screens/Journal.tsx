@@ -115,10 +115,12 @@ const Journal = () => {
   };
 
   // ✅ Safer filtering
-const filteredEntries = entries.filter(e =>
-  e.text.toLowerCase().includes(searchQuery.toLowerCase())
-  || e.date.toLowerCase().includes(searchQuery.toLowerCase())
-);
+const filteredEntries = entries.filter(e => {
+  const text = typeof e.text === 'string' ? e.text.toLowerCase() : '';
+  const date = typeof e.date === 'string' ? e.date.toLowerCase() : '';
+  const query = searchQuery?.toLowerCase() ?? '';
+  return text.includes(query) || date.includes(query);
+});
 
 
   return (
